@@ -95,3 +95,113 @@ AND
 MONTHS < 10
 ORDER BY employee_id ASC
 
+-- Type of Triangle
+-- Write a query identifying the type of each record in the TRIANGLES table using its three side lengths. Output one of the following statements for each record in the table:
+-- Equilateral: It's a triangle with  sides of equal length.
+-- Isosceles: It's a triangle with  sides of equal length.
+-- Scalene: It's a triangle with  sides of differing lengths.
+-- Not A Triangle: The given values of A, B, and C don't form a triangle.
+select
+case
+    when ((a+b) <= c) or ((a+c) <= b) or ((b+c) <= a) then "Not A Triangle"
+    when ((a <> b) and (b <> c) and (a <> c)) then "Scalene"
+    when ((a = b) and (a <> c)) then "Isosceles"
+    when ((a = c) and (a <> b)) then "Isosceles"
+    when ((a = b) and (b = c) and (a = c)) then "Equilateral"
+end as typeOfTriangle
+from TRIANGLES
+
+-- Revising Aggregations - The Count Function
+SELECT COUNT(ID) FROM CITY WHERE POPULATION > 100000
+
+-- Revising Aggregations - The Sum Function
+SELECT SUM(POPULATION)
+FROM CITY
+WHERE DISTRICT = "California"
+
+--Revising Aggregations - Averages
+SELECT AVG(POPULATION)
+FROM CITY
+WHERE DISTRICT = "California"
+
+--Average Population
+-- Query the average population for all cities in CITY, rounded down to the nearest integer.
+SELECT FLOOR(AVG(POPULATION))
+FROM CITY
+
+--Japan Population
+SELECT SUM(POPULATION)
+FROM CITY
+WHERE COUNTRYCODE = "JPN"
+
+--Population Density Difference
+-- Query the difference between the maximum and minimum populations in CITY.
+SELECT MAX(POPULATION) - MIN(POPULATION)
+FROM CITY
+
+--The Blunder
+-- NOTE: we want to replace all the 0s within salary, then calculate the avg
+-- round up the final answer and return
+SELECT CEILING(AVG(SALARY) - AVG(REPLACE(SALARY, 0, '')))
+FROM EMPLOYEES
+
+--Top Earners
+-- Write a query to find the maximum total earnings for all employees as well as the total number of employees who have maximum total earnings. 
+SELECT (MONTHS*SALARY) AS EARNINGS, COUNT(NAME)
+FROM EMPLOYEE
+WHERE (MONTHS*SALARY) = (SELECT MAX((MONTHS * SALARY))
+FROM EMPLOYEE)
+GROUP BY EARNINGS
+
+--Weather Observation Station 2
+SELECT ROUND(SUM(LAT_N), 2), ROUND(SUM(LONG_W), 2)
+FROM STATION
+
+--Weather Observation Station 13
+SELECT ROUND(SUM(LAT_N), 4)
+FROM STATION
+WHERE LAT_N > 38.7880
+AND LAT_N < 137.2345
+
+--Weather Observation Station 14
+SELECT ROUND(MAX(LAT_N), 4)
+FROM STATION
+WHERE LAT_N < 137.2345
+
+--Weather Observation Station 15
+SELECT ROUND(LONG_W, 4)
+FROM STATION
+WHERE LAT_N = (SELECT MAX(LAT_N)
+FROM STATION
+WHERE LAT_N < 137.2345)
+
+--Weather Observation Station 16
+SELECT ROUND(MIN(LAT_N), 4)
+FROM STATION
+WHERE LAT_N > 38.7780
+
+--Weather Observation Station 17
+SELECT ROUND(LONG_W, 4)
+FROM STATION
+WHERE LAT_N = (SELECT MIN(LAT_N)
+FROM STATION
+WHERE LAT_N > 38.7780)
+
+--Population Census
+SELECT sum(CI.POPULATION)
+FROM CITY CI, COUNTRY CO
+WHERE CI.CountryCode = CO.CODE
+and CO.CONTINENT = "Asia"
+
+--African Cities
+SELECT CI.NAME
+FROM CITY CI, COUNTRY CO
+WHERE CI.COUNTRYCODE = CO.CODE
+AND CO.CONTINENT = "Africa"
+
+--Average Population of Each Continent
+-- Given the CITY and COUNTRY tables, query the names of all the continents (COUNTRY.Continent) and their respective average city populations (CITY.Population) rounded down to the nearest integer.
+SELECT CO.CONTINENT, FLOOR(AVG(CI.POPULATION))
+FROM CITY CI, COUNTRY CO
+WHERE CI.COUNTRYCODE = CO.CODE
+GROUP BY CO.CONTINENT
