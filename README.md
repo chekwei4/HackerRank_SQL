@@ -30,11 +30,11 @@ FROM OrderDetails;
 ```
 
 Sample output:
-| OrderID | Quantity | QuantityText             |
-| ------- | -------- | ------------------------ |
-| 10248   | 12       | The quantity is under 30 |
-| 10248   | 10       | The quantity is under 30 |
-| 10248   | 5        | The quantity is under 30 |
+| OrderID | Quantity | QuantityText                    |
+| ------- | -------- | ------------------------------- |
+| 10248   | 12       | The quantity is under 30        |
+| 10248   | 10       | The quantity is under 30        |
+| 10249   | 40       | The quantity is greater than 30 |
 
 
 ## String Functions
